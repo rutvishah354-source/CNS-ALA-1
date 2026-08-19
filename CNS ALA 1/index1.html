@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rutvi Shah Encryption Lab</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Courier New", monospace;
+    min-height: 100vh;
+    padding: 20px 4%;
+    background: linear-gradient(135deg, #f8f6ff, #eefaff);
+    color: #4c5278;
+}
+
+.header {
+    text-align: center;
+    padding: 25px;
+    margin-bottom: 32px;
+    border-radius: 14px;
+    background: linear-gradient(100deg, #eee6ff, #e6faff);
+    border: 1px solid #c9b9f5;
+    box-shadow: 0 8px 25px rgba(110, 90, 180, 0.12);
+}
+
+.header h1 {
+    color: #7352c9;
+    font-size: 25px;
+    letter-spacing: 1px;
+}
+
+.header p {
+    margin-top: 12px;
+    color: #68708d;
+    font-size: 15px;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.88);
+    border-radius: 14px;
+    padding: 30px;
+    border: 1px solid #ddd6f8;
+    box-shadow: 0 10px 30px rgba(100, 90, 170, 0.10);
+}
+
+.card h2 {
+    color: #7052c8;
+    font-size: 22px;
+    margin-bottom: 22px;
+    border-bottom: 1px solid #e2dcf8;
+    padding-bottom: 14px;
+}
+
+.decrypt h2 {
+    color: #2797a1;
+}
+
+label {
+    display: block;
+    margin: 18px 0 9px;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+textarea,
+input {
+    width: 100%;
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid #cfc5f3;
+    background: #fcfbff;
+    color: #505779;
+    font-family: "Courier New", monospace;
+    font-size: 15px;
+    outline: none;
+    transition: 0.25s;
+}
+
+textarea {
+    height: 120px;
+    resize: vertical;
+}
+
+textarea:focus,
+input:focus {
+    border-color: #9b7bea;
+    box-shadow: 0 0 10px rgba(155, 123, 234, 0.18);
+}
+
+.decrypt textarea:focus,
+.decrypt input:focus {
+    border-color: #71cbd0;
+    box-shadow: 0 0 10px rgba(71, 190, 200, 0.18);
+}
+
+::placeholder {
+    color: #9298ae;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 28px;
+}
+
+button {
+    padding: 15px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-family: "Courier New", monospace;
+    font-size: 15px;
+    font-weight: bold;
+    transition: 0.25s;
+}
+
+.encrypt-btn {
+    background: linear-gradient(90deg, #ad8bea, #9672df);
+    color: white;
+}
+
+.decrypt-btn {
+    background: linear-gradient(90deg, #9ee8e5, #73cbd0);
+    color: #246e75;
+}
+
+.clear-btn {
+    background: white;
+    border: 1px solid #c9c9d8;
+    color: #555b78;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(100, 90, 180, 0.18);
+}
+
+.output {
+    margin-top: 26px;
+}
+
+.output textarea {
+    min-height: 120px;
+}
+
+@media (max-width: 900px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+
+    .header h1 {
+        font-size: 20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>
+        PLAIN TEXT BY YOU → ENCRYPTED BY RUTVI SHAH → DECRYPTED BY RUTVI SHAH
+    </h1>
+    <p>
+        Protect your message with symmetric encryption and recover it securely.
+    </p>
+</div>
+
+<div class="container">
+
+    <!-- ENCRYPTION -->
+    <div class="card">
+        <h2>🔐 Rutvi Shah Encryption Vault</h2>
+
+        <label>PLAINTEXT INPUT</label>
+        <textarea id="plainText"
+            placeholder="Type cleartext message..."></textarea>
+
+        <label>SECRET PASSPHRASE KEY</label>
+        <input
+            type="password"
+            id="encryptKey"
+            placeholder="Enter secret key..."
+        >
+
+        <div class="buttons">
+            <button class="encrypt-btn" onclick="encryptMessage()">
+                🔒 ENCRYPT MESSAGE
+            </button>
+
+            <button class="clear-btn" onclick="clearEncrypt()">
+                ↻ CLEAR
+            </button>
+        </div>
+
+        <div class="output">
+            <label>ENCRYPTED CIPHERTEXT OUTPUT</label>
+            <textarea
+                id="cipherText"
+                readonly
+                placeholder="Ciphertext will appear here..."
+            ></textarea>
+        </div>
+    </div>
+
+
+    <!-- DECRYPTION -->
+    <div class="card decrypt">
+        <h2>🔓 Rutvi Shah Decryption Lab</h2>
+
+        <label>CIPHERTEXT INPUT (AUTO-FILLED)</label>
+        <textarea
+            id="decryptCipher"
+            placeholder="Waiting for encryption payload..."
+        ></textarea>
+
+        <label>SECRET PASSPHRASE KEY (AUTO-FILLED)</label>
+        <input
+            type="password"
+            id="decryptKey"
+            placeholder="Waiting for key..."
+        >
+
+        <div class="buttons">
+            <button class="decrypt-btn" onclick="decryptMessage()">
+                🛡 DECRYPT MESSAGE
+            </button>
+
+            <button class="clear-btn" onclick="clearDecrypt()">
+                ↻ CLEAR
+            </button>
+        </div>
+
+        <div class="output">
+            <label>RECOVERED PLAINTEXT OUTPUT</label>
+            <textarea
+                id="recoveredText"
+                readonly
+                placeholder="Recovered cleartext..."
+            ></textarea>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+
+/* -----------------------------
+   ENCRYPTION
+------------------------------ */
+
+function encryptMessage() {
+
+    const message = document.getElementById("plainText").value;
+    const key = document.getElementById("encryptKey").value;
+
+    if (!message || !key) {
+        alert("Please enter a message and secret key.");
+        return;
+    }
+
+    /*
+       Simple demonstration encryption.
+       Each character is shifted using the key.
+    */
+
+    let encrypted = "";
+
+    for (let i = 0; i < message.length; i++) {
+        const charCode = message.charCodeAt(i);
+        const keyCode = key.charCodeAt(i % key.length);
+
+        encrypted += String.fromCharCode(
+            (charCode + keyCode) % 65535
+        );
+    }
+
+    /*
+       Convert encrypted text to Base64
+       so it can safely be displayed.
+    */
+
+    const encoded = btoa(
+        unescape(
+            encodeURIComponent(encrypted)
+        )
+    );
+
+    document.getElementById("cipherText").value = encoded;
+
+    // Auto-fill decryption panel
+    document.getElementById("decryptCipher").value = encoded;
+    document.getElementById("decryptKey").value = key;
+}
+
+
+/* -----------------------------
+   DECRYPTION
+------------------------------ */
+
+function decryptMessage() {
+
+    const cipher = document.getElementById("decryptCipher").value;
+    const key = document.getElementById("decryptKey").value;
+
+    if (!cipher || !key) {
+        alert("Please enter ciphertext and secret key.");
+        return;
+    }
+
+    try {
+
+        const decoded = decodeURIComponent(
+            escape(
+                atob(cipher)
+            )
+        );
+
+        let decrypted = "";
+
+        for (let i = 0; i < decoded.length; i++) {
+
+            const charCode = decoded.charCodeAt(i);
+            const keyCode = key.charCodeAt(i % key.length);
+
+            let original = charCode - keyCode;
+
+            if (original < 0) {
+                original += 65535;
+            }
+
+            decrypted += String.fromCharCode(original);
+        }
+
+        document.getElementById("recoveredText").value = decrypted;
+
+    } catch (error) {
+
+        alert("Invalid ciphertext or key.");
+
+    }
+}
+
+
+/* -----------------------------
+   CLEAR ENCRYPTION
+------------------------------ */
+
+function clearEncrypt() {
+
+    document.getElementById("plainText").value = "";
+    document.getElementById("encryptKey").value = "";
+    document.getElementById("cipherText").value = "";
+
+    document.getElementById("decryptCipher").value = "";
+    document.getElementById("decryptKey").value = "";
+    document.getElementById("recoveredText").value = "";
+}
+
+
+/* -----------------------------
+   CLEAR DECRYPTION
+------------------------------ */
+
+function clearDecrypt() {
+
+    document.getElementById("decryptCipher").value = "";
+    document.getElementById("decryptKey").value = "";
+    document.getElementById("recoveredText").value = "";
+}
+
+</script>
+
+</body>
+</html>
